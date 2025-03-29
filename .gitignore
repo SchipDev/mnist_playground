@@ -1,2 +1,5 @@
 mnist_env/
+data/
+__pycache__/
+core/__pycache__/
 
