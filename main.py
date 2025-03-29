@@ -27,6 +27,24 @@ print("Done")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+def validate_model(loader, model, device):
+    model.eval()
+    correct = 0
+    total = 0
+    
+    with torch.no_grad():
+        for images, labels in loader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    
+    accuracy = (correct / total) * 100
+    return accuracy
+
+
+
 print(f"Beginning training for {NUM_EPOCHS} epochs")
 for epoch in range(NUM_EPOCHS):
     model.train()
@@ -47,7 +65,8 @@ for epoch in range(NUM_EPOCHS):
         total += labels.size(0)
         correct += (predicted_labels == labels).sum().item()
 
-    accuracy = (correct / total) * 100
-    print(f"Epoch [{epoch+1}/{NUM_EPOCHS}] finished: accuracy={accuracy:.4f}, loss={running_loss/len(train_dl):.4f}")
+    train_accuracy = (correct / total) * 100
+    val_accuracy = validate_model(test_dl, model, DEVICE)
+    print(f"Epoch [{epoch+1}/{NUM_EPOCHS}] finished: training accuracy={train_accuracy:.4f}, validation accuracy={val_accuracy:.4f}, loss={running_loss/len(train_dl):.4f}")
 
 print("Training complete")
