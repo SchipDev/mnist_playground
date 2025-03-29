@@ -1,4 +1,5 @@
 import torch
+from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 import os
 
@@ -26,3 +27,13 @@ def download_mnist(dataset_directory: str, transforms) -> tuple:
     assert test_data is not None, "Testing data is null, something went wrong :("
 
     return (train_data, test_data)
+
+
+def create_dataloaders(train_data, test_data, batch_size: int=64, shuffle_train: bool=True, shuffle_test: bool=False) -> tuple:
+    train_dl = DataLoader(train_data, batch_size=batch_size, shuffle=shuffle_train)
+    test_dl = DataLoader(test_data, batch_size=batch_size, shuffle=shuffle_test)
+
+    assert train_dl is not None, "Failed to create train dataloader"
+    assert test_dl is not None, "Failed to create test dataloader"
+
+    return (train_dl, test_dl)
