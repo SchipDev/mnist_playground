@@ -31,9 +31,10 @@ print(f"Beginning training for {NUM_EPOCHS} epochs")
 for epoch in range(NUM_EPOCHS):
     model.train()
     running_loss = 0.0
+    total, correct = 0, 0
     for images, labels in train_dl:
         images, labels = images.to(DEVICE), labels.to(DEVICE)
-        
+
         outputs = model(images)
         loss = criterion(outputs, labels)
 
@@ -42,7 +43,11 @@ for epoch in range(NUM_EPOCHS):
         optimizer.step()
 
         running_loss += loss.item()
+        _, predicted_labels = torch.max(outputs, 1)
+        total += labels.size(0)
+        correct += (predicted_labels == labels).sum().item()
 
-    print(f"Epoch [{epoch+1}/{NUM_EPOCHS}] finished: loss={running_loss/len(train_dl):04f}")
+    accuracy = (correct / total) * 100
+    print(f"Epoch [{epoch+1}/{NUM_EPOCHS}] finished: accuracy={accuracy:.4f}, loss={running_loss/len(train_dl):.4f}")
 
 print("Training complete")
