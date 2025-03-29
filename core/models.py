@@ -13,14 +13,15 @@ class SimpleClassifier(nn.Module):
     
     def forward(self, x):
         x = x.view(-1, 28*28)
+        
         x = self.fc1(x)
-        x = self.relu(x)
+        x = torch.relu(x)
 
         x = self.fc2(x)
-        x = self.relu(x)
+        x = torch.relu(x)
 
         x = self.fc3(x)
-        x = self.relu(x)
+        x = torch.relu(x)
 
         x = self.fc4(x)
 
