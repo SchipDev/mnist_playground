@@ -2,7 +2,7 @@ import torch
 from torchvision import transforms
 
 from core.dataset import *
-from core.models import SimpleClassifier
+from core.models import SimpleClassifier, CNNClassifier
 
 NUM_EPOCHS = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -21,7 +21,8 @@ train_dl, test_dl = create_dataloaders(train_data, test_data)
 print("Done")
 
 print("Initializing model...")
-model = SimpleClassifier().to(DEVICE)
+# model = SimpleClassifier().to(DEVICE)
+model = CNNClassifier().to(DEVICE)
 print("Done")
 
 criterion = torch.nn.CrossEntropyLoss()
